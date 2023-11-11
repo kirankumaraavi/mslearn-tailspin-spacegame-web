@@ -5,6 +5,10 @@
 
 trigger:
 - master
+stages: 
+-  stage: buildstage
+   jobs:
+     - job: buildjob
 
 pool:
   vmImage: 'windows-latest'
@@ -31,4 +35,25 @@ steps:
 - task: VSTest@2
   inputs:
     platform: '$(buildPlatform)'
-    configuration: '$(buildConfiguration)'
+    configuration: '$(buildConfiguration)'tages: 
+-  stage: deploystage
+   jobs:
+     - job: deployjob
+
+       pool:
+         vmImage: 'windows-latest'
+steps:
+- task: DownloadBuildArtifacts@1
+  inputs:
+    buildType: 'current'
+    downloadType: 'single'
+    artifactName: 'drop'
+    downloadPath: '$(System.ArtifactsDirectory)'
+- task: AzureRmWebAppDeployment@4
+  inputs:
+    ConnectionType: 'AzureRM'
+    azureSubscription: 'Free Trial(b884babd-3284-460f-9cd5-302aaaeab6f4)'
+    appType: 'webApp'
+    WebAppName: 
+    packageForLinux: '$(System.DefaultWorkingDirectory)/**/*.zip'
+
