@@ -1,0 +1,15 @@
+stages:
+  - stage: buildstage
+    displayname: dotnetbuild
+    jobs:
+      - job: dotnetbuildjob
+        displayname: buildjobdotnet
+        steps:
+          - script: dotnetrestore
+            displayname: restore
+          - script: dotnet build
+            displayname: build app
+          - script: dotnet test
+            displayname: test
+          - script: dotnet publish
+            displayname: publish
